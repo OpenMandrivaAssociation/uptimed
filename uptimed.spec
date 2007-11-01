@@ -101,5 +101,4 @@ rm -rf %{buildroot}
 %files -n %{develname}
 %defattr(-,root,root)
 %{_libdir}/libuptimed.so
-%{_libdir}/libuptimed.a
 %{_libdir}/libuptimed.la
