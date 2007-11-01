@@ -3,20 +3,20 @@
 %define rel	1
 %define	release	%mkrel %rel
 
-%define	major	0
+%define	major 0
 %define	libname	%mklibname %{name} %{major}
+%define develname %mklibname %{name} -d
 
 Summary:	A daemon to record and keep track of system uptimes
 Name:		%{name}
 Version:	%{version}
 Release:	%{release}
-License:	GPL
+License:	GPLv2+
 Group:		Monitoring
 URL:		http://podgorny.cz/moin/Uptimed
 Source0:	http://podgorny.cz/uptimed/releases/%{name}-%{version}.tar.bz2
 Source1:	%{name}.init
 Patch0:		uptimed-0.3.7-makefile.patch
-BuildRequires:	automake1.9
 Requires(post):	rpm-helper
 Requires(preun): rpm-helper
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -32,35 +32,34 @@ though syslog and e-mail, and comes with a console front end to
 parse the records, which can also easily be used to show your 
 records on your Web page.
 
-%package -n	%{libname}
+%package -n %{libname}
 Summary:	Generic libraries need by uptimed
 Group:		System/Libraries
-Provides:	lib%{name} = %{version}
+Provides:	lib%{name} = %{version}-%{release}
 
-%description -n	%{libname}
+%description -n %{libname}
 Generic libraries needed by uptimed.
 
-%package -n	%{libname}-devel
+%package -n %{develname}
 Summary:	Generic libraries need by uptimed
 Group:		Development/Other
-Provides:	lib%{name}-devel = %{version}
-Provides:	%{name}-devel = %{version}
-Requires:	%{libname} = %{version}
+Provides:	lib%{name}-devel = %{version}-%{release}
+Provides:	%{name}-devel = %{version}-%{release}
+Requires:	%{libname} = %{version}-%{release}
+Obsoletes:	%mklibname %{name} 0 -d
 
-%description -n %{libname}-devel
+%description -n %{develname}
 Development files for uptimed.
 
 %prep
 %setup -q
 %patch0 -p0 -b .makefile
-cp -a %SOURCE1 .
+cp -a %{SOURCE1} .
 
 # this was faster, and easier...
 touch NEWS
 
 %build
-aclocal-1.9
-automake-1.9
 %configure2_5x
 %make
 
@@ -98,7 +97,7 @@ rm -rf %{buildroot}
 %defattr(-,root,root)
 %{_libdir}/libuptimed.so.%{major}*
 
-%files -n %{libname}-devel
+%files -n %{develname}
 %defattr(-,root,root)
 %{_libdir}/libuptimed.so
 %{_libdir}/libuptimed.a
