@@ -1,5 +1,5 @@
 %define	name	uptimed
-%define	version	0.3.10
+%define	version	0.3.12
 %define rel	1
 %define	release	%mkrel %rel
 
@@ -103,5 +103,3 @@ rm -rf %{buildroot}
 %{_libdir}/libuptimed.so
 %{_libdir}/libuptimed.a
 %{_libdir}/libuptimed.la
-
-
