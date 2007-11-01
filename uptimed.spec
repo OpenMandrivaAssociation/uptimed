@@ -16,7 +16,7 @@ Group:		Monitoring
 URL:		http://podgorny.cz/moin/Uptimed
 Source0:	http://podgorny.cz/uptimed/releases/%{name}-%{version}.tar.bz2
 Source1:	%{name}.init
-Patch0:		uptimed-0.3.7-makefile.patch
+Patch0:		uptimed-0.3.12-makefile.patch
 Requires(post):	rpm-helper
 Requires(preun): rpm-helper
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -53,14 +53,15 @@ Development files for uptimed.
 
 %prep
 %setup -q
-%patch0 -p0 -b .makefile
+%patch0 -p1 -b .makefile
 cp -a %{SOURCE1} .
 
 # this was faster, and easier...
 touch NEWS
 
 %build
-%configure2_5x
+%configure2_5x \
+	--disable-static
 %make
 
 %install
