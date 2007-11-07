@@ -1,6 +1,6 @@
 %define	name	uptimed
 %define	version	0.3.12
-%define rel	1
+%define rel	2
 %define	release	%mkrel %rel
 
 %define	major 0
