@@ -19,6 +19,7 @@ Source1:	%{name}.init
 Patch0:		uptimed-0.3.12-makefile.patch
 Requires(post):	rpm-helper
 Requires(preun): rpm-helper
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 Uptimed is an uptime record daemon keeping track of the highest 
