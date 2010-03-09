@@ -1,7 +1,7 @@
+###//%define _disable_ld_no_undefined 1
 %define	name	uptimed
-%define	version	0.3.12
-%define rel	3
-%define	release	%mkrel %rel
+%define	version	0.3.16
+%define	release	%mkrel 1
 
 %define	major 0
 %define	libname	%mklibname %{name} %{major}
@@ -16,10 +16,8 @@ Group:		Monitoring
 URL:		http://podgorny.cz/moin/Uptimed
 Source0:	http://podgorny.cz/uptimed/releases/%{name}-%{version}.tar.bz2
 Source1:	%{name}.init
-Patch0:		uptimed-0.3.12-makefile.patch
-Requires(post):	rpm-helper
-Requires(preun): rpm-helper
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
+Patch0:		uptimed-makefile.patch
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}
 
 %description
 Uptimed is an uptime record daemon keeping track of the highest 
@@ -53,19 +51,20 @@ Development files for uptimed.
 
 %prep
 %setup -q
-%patch0 -p1 -b .makefile
+%patch0 -p0 -b .makefile
 cp -a %{SOURCE1} .
 
 # this was faster, and easier...
 touch NEWS
 
 %build
-%configure2_5x \
-	--disable-static
+./bootstrap.sh
+
+%configure --disable-static
 %make
 
 %install
-rm -rf %{buldroot}
+rm -rf %{buildroot}
 %makeinstall_std 
 
 install -m755 uptimed.init -D %{buildroot}%{_initrddir}/uptimed
