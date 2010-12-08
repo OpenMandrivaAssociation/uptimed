@@ -1,7 +1,7 @@
 ###//%define _disable_ld_no_undefined 1
 %define	name	uptimed
 %define	version	0.3.16
-%define	release	%mkrel 1
+%define	release	%mkrel 2
 
 %define	major 0
 %define	libname	%mklibname %{name} %{major}
