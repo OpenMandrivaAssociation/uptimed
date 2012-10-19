@@ -1,7 +1,7 @@
-###//%define _disable_ld_no_undefined 1
+%define _disable_ld_no_undefined 1
 %define	name	uptimed
-%define	version	0.3.16
-%define	release	%mkrel 2
+%define	version	0.3.17
+%define	release	1
 
 %define	major 0
 %define	libname	%mklibname %{name} %{major}
@@ -16,8 +16,9 @@ Group:		Monitoring
 URL:		http://podgorny.cz/moin/Uptimed
 Source0:	http://podgorny.cz/uptimed/releases/%{name}-%{version}.tar.bz2
 Source1:	%{name}.init
+Source2:	%{name}.init.systemd
 Patch0:		uptimed-makefile.patch
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}
+Patch1:		uptimed-systemd.patch
 
 %description
 Uptimed is an uptime record daemon keeping track of the highest 
@@ -51,8 +52,10 @@ Development files for uptimed.
 
 %prep
 %setup -q
-%patch0 -p0 -b .makefile
+#%patch0 -p0 -b .makefile
+%patch1 -p1 -b .systemd
 cp -a %{SOURCE1} .
+cp -a %{SOURCE2} ./etc/uptimed.service.in
 
 # this was faster, and easier...
 touch NEWS
@@ -64,44 +67,29 @@ touch NEWS
 %make
 
 %install
-rm -rf %{buildroot}
 %makeinstall_std 
 
+mkdir -p %{buildroot}/var/spool/%{name}
 install -m755 uptimed.init -D %{buildroot}%{_initrddir}/uptimed
+install -m755 etc/uptimed.service -D %{buildroot}/lib/systemd/system/%{name}.service
 mv %{buildroot}%{_sysconfdir}/uptimed.conf-dist %{buildroot}%{_sysconfdir}/uptimed.conf
 
 %post
-install -m 755 -d %{_var}/spool/uptimed
-%_post_service uptimed
-
-%if %mdkversion < 200900
-%post -n %{libname} -p /sbin/ldconfig
-%endif
-
-%preun
-%_preun_service uptimed
-
-%if %mdkversion < 200900
-%postun -n %{libname} -p /sbin/ldconfig
-%endif
-
-%clean
-rm -rf %{buildroot}
+systemd-tmpfiles --create
+%_post_service %{name}
 
 %files
-%defattr(-,root,root)
 %doc AUTHORS CREDITS ChangeLog INSTALL.cgi INSTALL.upgrade README TODO sample-cgi/
 %config(noreplace) %{_sysconfdir}/uptimed.conf
 %{_initrddir}/uptimed
+/lib/systemd/system/%{name}.service
 %{_sbindir}/uptimed
+%dir /var/spool/uptimed
 %{_bindir}/uprecords
 %{_mandir}/*/*
 
 %files -n %{libname}
-%defattr(-,root,root)
 %{_libdir}/libuptimed.so.%{major}*
 
 %files -n %{develname}
-%defattr(-,root,root)
 %{_libdir}/libuptimed.so
-%{_libdir}/libuptimed.la
