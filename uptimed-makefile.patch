@@ -1,0 +1,25 @@
+--- Makefile.am.orig	2010-03-08 11:32:01.000000000 +0100
++++ Makefile.am	2010-03-08 11:32:34.000000000 +0100
+@@ -8,9 +8,6 @@
+ 
+ AM_CFLAGS = @CFLAGS@ -DFILE_CONFIG=\"$(sysconfdir)/uptimed.conf\"
+ 
+-install-data-local:
+-	$(INSTALL) -d $(DESTDIR)/var/spool/uptimed
+-
+ srpm: dist
+ 	@(rpmbuild -ts uptimed-$(PACKAGE_VERSION).tar.gz)
+ 
+--- Makefile.in.orig	2010-03-08 11:32:09.000000000 +0100
++++ Makefile.in	2010-03-08 11:33:12.000000000 +0100
+@@ -639,10 +639,6 @@
+ 	mostlyclean mostlyclean-generic mostlyclean-libtool pdf pdf-am \
+ 	ps ps-am tags tags-recursive uninstall uninstall-am
+ 
+-
+-install-data-local:
+-	$(INSTALL) -d $(DESTDIR)/var/spool/uptimed
+-
+ srpm: dist
+ 	@(rpmbuild -ts uptimed-$(PACKAGE_VERSION).tar.gz)
+ 

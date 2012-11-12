@@ -1,0 +1,4 @@
+sources:
+  "uptimed-0.3.17.tar.bz2:"	a40728353b153d1967371c2fd498e6bc3274c4c9
+  "uptimed.init:"	b42187063e0a4ea4202b802740b9153a54cbe215
+  "uptimed.init.systemd:"	7e3f2960745191eeff18a4aea6f50b9337f49b4b

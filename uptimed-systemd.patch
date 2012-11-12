@@ -1,0 +1,31 @@
+--- a/configure.ac	Fri Jun 29 11:14:39 2012 +0200
++++ b/configure.ac	Fri Jun 29 11:15:30 2012 +0200
+@@ -9,6 +9,15 @@
+ case "$host" in
+   *-linux*)
+     AC_DEFINE(PLATFORM_LINUX, 1, [Define if you are compiling for Linux])
++    PKG_PROG_PKG_CONFIG
++    AC_ARG_WITH([systemdsystemunitdir],
++        AS_HELP_STRING([--with-systemdsystemunitdir=DIR], [Directory for systemd service files]),
++        [], [with_systemdsystemunitdir=$($PKG_CONFIG --variable=systemdsystemunitdir systemd)])
++        if test "x$with_systemdsystemunitdir" != xno; then
++            AC_SUBST([systemdsystemunitdir], [$with_systemdsystemunitdir])
++            AC_OUTPUT([etc/uptimed.service])       
++        fi
++        AM_CONDITIONAL(HAVE_SYSTEMD, [test -n "$with_systemdsystemunitdir" -a "x$with_systemdsystemunitdir" != xno ])
+     ;;
+   *-hpux*)
+     AC_DEFINE(PLATFORM_HPUX, 1, [Define if you are compiling for HP/UX])
+diff -r ce1c436cf95b -r 673003323a72 etc/Makefile.am
+--- a/etc/Makefile.am	Fri Jun 29 11:14:39 2012 +0200
++++ b/etc/Makefile.am	Fri Jun 29 11:15:30 2012 +0200
+@@ -1,3 +1,7 @@
+ sysconf_DATA = uptimed.conf-dist
+ 
+ EXTRA_DIST = uptimed.conf-dist rc.uptimed
++
++if HAVE_SYSTEMD
++systemdsystemunit_DATA = uptimed.service
++endif
+
+
