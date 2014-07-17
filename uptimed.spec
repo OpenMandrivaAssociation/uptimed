@@ -1,21 +1,17 @@
 %define _disable_ld_no_undefined 1
-%define	name	uptimed
-%define	version	0.3.17
-%define	release	1
 
 %define	major 0
 %define	libname	%mklibname %{name} %{major}
 %define develname %mklibname %{name} -d
 
 Summary:	A daemon to record and keep track of system uptimes
-Name:		%{name}
-Version:	%{version}
-Release:	%{release}
+Name:		uptimed
+Version:	0.3.17
+Release:	2
 License:	GPLv2+
 Group:		Monitoring
 URL:		http://podgorny.cz/moin/Uptimed
 Source0:	http://podgorny.cz/uptimed/releases/%{name}-%{version}.tar.bz2
-Source1:	%{name}.init
 Source2:	%{name}.init.systemd
 Patch0:		uptimed-makefile.patch
 Patch1:		uptimed-systemd.patch
@@ -54,7 +50,6 @@ Development files for uptimed.
 %setup -q
 #%patch0 -p0 -b .makefile
 %patch1 -p1 -b .systemd
-cp -a %{SOURCE1} .
 cp -a %{SOURCE2} ./etc/uptimed.service.in
 
 # this was faster, and easier...
@@ -62,7 +57,7 @@ touch NEWS
 
 %build
 ./bootstrap.sh
-
+autoreconf -i
 %configure --disable-static
 %make
 
@@ -70,7 +65,6 @@ touch NEWS
 %makeinstall_std 
 
 mkdir -p %{buildroot}/var/spool/%{name}
-install -m755 uptimed.init -D %{buildroot}%{_initrddir}/uptimed
 install -m755 etc/uptimed.service -D %{buildroot}/lib/systemd/system/%{name}.service
 mv %{buildroot}%{_sysconfdir}/uptimed.conf-dist %{buildroot}%{_sysconfdir}/uptimed.conf
 
@@ -78,10 +72,12 @@ mv %{buildroot}%{_sysconfdir}/uptimed.conf-dist %{buildroot}%{_sysconfdir}/uptim
 systemd-tmpfiles --create
 %_post_service %{name}
 
+%preun
+%_preun_service %{name}
+
 %files
 %doc AUTHORS CREDITS ChangeLog INSTALL.cgi INSTALL.upgrade README TODO sample-cgi/
 %config(noreplace) %{_sysconfdir}/uptimed.conf
-%{_initrddir}/uptimed
 /lib/systemd/system/%{name}.service
 %{_sbindir}/uptimed
 %dir /var/spool/uptimed
