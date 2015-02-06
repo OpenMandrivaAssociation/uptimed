@@ -7,7 +7,7 @@
 Summary:	A daemon to record and keep track of system uptimes
 Name:		uptimed
 Version:	0.3.17
-Release:	2
+Release:	3
 License:	GPLv2+
 Group:		Monitoring
 URL:		http://podgorny.cz/moin/Uptimed
