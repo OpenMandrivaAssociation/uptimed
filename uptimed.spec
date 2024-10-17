@@ -10,7 +10,7 @@ Version:	0.3.17
 Release:	3
 License:	GPLv2+
 Group:		Monitoring
-URL:		http://podgorny.cz/moin/Uptimed
+URL:		https://podgorny.cz/moin/Uptimed
 Source0:	http://podgorny.cz/uptimed/releases/%{name}-%{version}.tar.bz2
 Source2:	%{name}.init.systemd
 Patch0:		uptimed-makefile.patch
