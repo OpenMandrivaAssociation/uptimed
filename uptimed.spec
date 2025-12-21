@@ -16,6 +16,11 @@ Source2:	%{name}.init.systemd
 Patch0:		uptimed-makefile.patch
 Patch1:		uptimed-systemd.patch
 
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 %description
 Uptimed is an uptime record daemon keeping track of the highest 
 uptimes the system ever had. Instead of using a pid file to 
